@@ -1,0 +1,7 @@
+dist/
+node_modules/
+ios/
+android/
+playwright-report/
+test-results/
+package-lock.json
