@@ -39,6 +39,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, [aiProvider]);
 
   const updateSettings = useCallback(async (patch: Partial<EigenraumSettings>) => {
+    // Optimistisch: die Oberfläche reagiert sofort, die Persistierung folgt.
+    setSettings((previous) => ({ ...previous, ...patch }));
     const next = await persistSettings(patch);
     setSettings(next);
   }, []);
