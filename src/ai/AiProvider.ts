@@ -12,11 +12,12 @@ export interface GenerationRequest {
 /**
  * Abstraktion über die KI-Anbindung. Implementierungen:
  * - NativeAiProvider: echter OpenAI-Zugriff über das native Plugin
+ * - WebDevAiProvider: echter OpenAI-Zugriff im Browser, nur Entwicklung
  * - MockAiProvider: deterministischer Mock für Browser/Tests
  * - UnavailableAiProvider: Web-Produktionsbuild ohne Mock
  */
 export interface AiProvider {
-  readonly kind: "native" | "mock" | "unavailable";
+  readonly kind: "native" | "web-dev" | "mock" | "unavailable";
 
   isConfigured(): Promise<boolean>;
   configureKey(): Promise<{ saved: boolean; validated: boolean }>;

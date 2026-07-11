@@ -13,6 +13,7 @@ import {
   type ReasoningEffort,
 } from "../../ai/prompt-builder";
 import { APP_VERSION } from "../../app/version";
+import { isRealWebAiEnabled, setRealWebAiEnabled } from "../../ai/provider-factory";
 
 export function SettingsScreen() {
   const {
@@ -95,6 +96,21 @@ export function SettingsScreen() {
             </Button>
           )}
         </div>
+        {import.meta.env.DEV && (
+          <div className="settings-row">
+            <label htmlFor="real-web-ai">Echte OpenAI-Anfragen im Browser (Entwicklung)</label>
+            <input
+              id="real-web-ai"
+              type="checkbox"
+              checked={isRealWebAiEnabled()}
+              onChange={(event) => {
+                setRealWebAiEnabled(event.target.checked);
+                // Der Provider wird einmalig beim App-Start erzeugt.
+                window.location.reload();
+              }}
+            />
+          </div>
+        )}
       </section>
 
       <section className="surface stack">

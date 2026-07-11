@@ -2,6 +2,7 @@ import { Capacitor } from "@capacitor/core";
 import type { AiProvider, GenerationRequest } from "./AiProvider";
 import type { GeneratedArtifactOutput } from "./output-schema";
 import { NativeAiProvider } from "./NativeAiProvider";
+import { WebDevAiProvider } from "./WebDevAiProvider";
 import { MockAiProvider } from "./MockAiProvider";
 import { AiError } from "./errors";
 
@@ -33,6 +34,36 @@ class UnavailableAiProvider implements AiProvider {
   }
 }
 
+const REAL_WEB_AI_STORAGE = "eigenraum.devAi.real";
+
+/**
+ * Dev-Schalter (Einstellungen): echte OpenAI-Anfragen im Browser über
+ * den Vite-Proxy. Nur im Dev-Build wirksam, damit E2E-Tests und
+ * Produktions-Web-Builds davon unberührt bleiben.
+ */
+export function isRealWebAiEnabled(): boolean {
+  if (!import.meta.env.DEV) {
+    return false;
+  }
+  try {
+    return localStorage.getItem(REAL_WEB_AI_STORAGE) === "true";
+  } catch {
+    return false;
+  }
+}
+
+export function setRealWebAiEnabled(enabled: boolean): void {
+  try {
+    if (enabled) {
+      localStorage.setItem(REAL_WEB_AI_STORAGE, "true");
+    } else {
+      localStorage.removeItem(REAL_WEB_AI_STORAGE);
+    }
+  } catch {
+    // localStorage nicht verfügbar – Schalter bleibt wirkungslos.
+  }
+}
+
 function mockAiEnabled(): boolean {
   if (import.meta.env.DEV) {
     return true;
@@ -50,6 +81,9 @@ function mockAiEnabled(): boolean {
 export function createAiProvider(): AiProvider {
   if (Capacitor.isNativePlatform()) {
     return new NativeAiProvider();
+  }
+  if (isRealWebAiEnabled()) {
+    return new WebDevAiProvider();
   }
   if (mockAiEnabled()) {
     return new MockAiProvider();
