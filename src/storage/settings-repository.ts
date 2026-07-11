@@ -1,9 +1,16 @@
-import { DEFAULT_AI_MODEL } from "../ai/prompt-builder";
+import {
+  DEFAULT_AI_MODEL,
+  DEFAULT_REASONING_EFFORT,
+  isKnownAiModel,
+  isKnownReasoningEffort,
+  type ReasoningEffort,
+} from "../ai/prompt-builder";
 import { getDatabase } from "./database";
 
 export interface EigenraumSettings {
   reducedMotion: boolean;
   aiModel: string;
+  reasoningEffort: ReasoningEffort;
   contextDepth: 0 | 1 | 3;
   onboardingCompleted: boolean;
 }
@@ -11,6 +18,7 @@ export interface EigenraumSettings {
 export const DEFAULT_SETTINGS: EigenraumSettings = {
   reducedMotion: false,
   aiModel: DEFAULT_AI_MODEL,
+  reasoningEffort: DEFAULT_REASONING_EFFORT,
   contextDepth: 3,
   onboardingCompleted: false,
 };
@@ -32,7 +40,15 @@ export async function loadSettings(): Promise<EigenraumSettings> {
       typeof stored.reducedMotion === "boolean"
         ? stored.reducedMotion
         : DEFAULT_SETTINGS.reducedMotion,
-    aiModel: typeof stored.aiModel === "string" ? stored.aiModel : DEFAULT_SETTINGS.aiModel,
+    aiModel:
+      typeof stored.aiModel === "string" && isKnownAiModel(stored.aiModel)
+        ? stored.aiModel
+        : DEFAULT_SETTINGS.aiModel,
+    reasoningEffort:
+      typeof stored.reasoningEffort === "string" &&
+      isKnownReasoningEffort(stored.reasoningEffort)
+        ? stored.reasoningEffort
+        : DEFAULT_SETTINGS.reasoningEffort,
     contextDepth:
       stored.contextDepth === 0 || stored.contextDepth === 1 || stored.contextDepth === 3
         ? stored.contextDepth

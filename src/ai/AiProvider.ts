@@ -1,11 +1,12 @@
 import type { EveningCheckout } from "../domain/evening-checkout";
 import type { GeneratedArtifactOutput } from "./output-schema";
-import type { RecentContextEntry } from "./prompt-builder";
+import type { ReasoningEffort, RecentContextEntry } from "./prompt-builder";
 
 export interface GenerationRequest {
   checkout: EveningCheckout;
   recentContext: RecentContextEntry[];
   model: string;
+  reasoningEffort: ReasoningEffort;
 }
 
 /**

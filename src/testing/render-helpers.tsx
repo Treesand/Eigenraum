@@ -10,6 +10,7 @@ export interface TestAppStateOptions {
   keyConfigured?: boolean;
   settings?: Partial<AppState["settings"]>;
   navigate?: (route: Route) => void;
+  updateSettings?: AppState["updateSettings"];
 }
 
 export function makeAppState(options: TestAppStateOptions = {}): AppState {
@@ -18,7 +19,7 @@ export function makeAppState(options: TestAppStateOptions = {}): AppState {
     route: options.route ?? "home",
     navigate: options.navigate ?? (() => undefined),
     settings: { ...DEFAULT_SETTINGS, ...options.settings },
-    updateSettings: async () => undefined,
+    updateSettings: options.updateSettings ?? (async () => undefined),
     aiProvider: provider,
     keyConfigured: options.keyConfigured ?? true,
     refreshKeyConfigured: async () => undefined,

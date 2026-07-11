@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  AI_MODELS,
   buildGenerationInput,
   buildResponsesRequestBody,
   DEFAULT_AI_MODEL,
+  DEFAULT_REASONING_EFFORT,
+  isKnownAiModel,
+  isKnownReasoningEffort,
+  REASONING_EFFORTS,
 } from "./prompt-builder";
 import { makeCheckout } from "../testing/fixtures";
 
@@ -67,5 +72,42 @@ describe("buildResponsesRequestBody", () => {
       DEFAULT_AI_MODEL,
     );
     expect(new TextEncoder().encode(raw).length).toBeLessThan(64 * 1024);
+  });
+
+  it("übernimmt Modell- und Thinking-Auswahl in den Request", () => {
+    const raw = buildResponsesRequestBody(
+      buildGenerationInput(makeCheckout(), []),
+      "gpt-5.6-luna",
+      "high",
+    );
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    expect(parsed.model).toBe("gpt-5.6-luna");
+    expect((parsed.reasoning as { effort: string }).effort).toBe("high");
+    // Höhere Thinking-Stufen erhalten mehr Token-Budget.
+    expect(parsed.max_output_tokens as number).toBeGreaterThan(900);
+  });
+});
+
+describe("Modell- und Thinking-Auswahl", () => {
+  it("bietet Terra, Sol und Luna an; Terra ist Standard", () => {
+    expect(AI_MODELS.map((model) => model.label)).toEqual(["Terra", "Sol", "Luna"]);
+    expect(AI_MODELS[0].id).toBe(DEFAULT_AI_MODEL);
+  });
+
+  it("bietet die Thinking-Stufen der Responses API an; low ist Standard", () => {
+    expect(REASONING_EFFORTS.map((effort) => effort.id)).toEqual([
+      "minimal",
+      "low",
+      "medium",
+      "high",
+    ]);
+    expect(DEFAULT_REASONING_EFFORT).toBe("low");
+  });
+
+  it("validiert bekannte und unbekannte Werte", () => {
+    expect(isKnownAiModel("gpt-5.6-sol")).toBe(true);
+    expect(isKnownAiModel("gpt-4o")).toBe(false);
+    expect(isKnownReasoningEffort("medium")).toBe(true);
+    expect(isKnownReasoningEffort("ultra")).toBe(false);
   });
 });

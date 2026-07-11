@@ -80,6 +80,18 @@ describe("generateMorningArtifact", () => {
     expect(all).toHaveLength(1);
   });
 
+  it("reicht Modell- und Thinking-Einstellung an den Provider durch", async () => {
+    const provider = new TestAiProvider();
+    const checkout = await makeStoredCheckout();
+    await generateMorningArtifact(checkout, provider, {
+      ...DEFAULT_SETTINGS,
+      aiModel: "gpt-5.6-sol",
+      reasoningEffort: "medium",
+    });
+    expect(provider.calls[0]?.model).toBe("gpt-5.6-sol");
+    expect(provider.calls[0]?.reasoningEffort).toBe("medium");
+  });
+
   it("respektiert contextDepth 0 (kein recentContext)", async () => {
     const provider = new TestAiProvider();
     const checkout = await makeStoredCheckout();

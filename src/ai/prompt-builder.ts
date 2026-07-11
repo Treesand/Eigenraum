@@ -4,6 +4,45 @@ import { buildOpenAiOutputJsonSchema, OPENAI_OUTPUT_SCHEMA_NAME } from "./output
 
 export const DEFAULT_AI_MODEL = "gpt-5.6-terra";
 
+/** In den Einstellungen wählbare Modelle. */
+export const AI_MODELS = [
+  { id: "gpt-5.6-terra", label: "Terra", description: "Ausgewogen (Standard)" },
+  { id: "gpt-5.6-sol", label: "Sol", description: "Leistungsstärker, teurer" },
+  { id: "gpt-5.6-luna", label: "Luna", description: "Schneller, günstiger" },
+] as const;
+
+export type AiModelId = (typeof AI_MODELS)[number]["id"];
+
+export const REASONING_EFFORTS = [
+  { id: "minimal", label: "Aus", description: "Kein zusätzliches Nachdenken" },
+  { id: "low", label: "Kurz", description: "Kurzes Nachdenken (Standard)" },
+  { id: "medium", label: "Mittel", description: "Gründlicheres Nachdenken" },
+  { id: "high", label: "Ausführlich", description: "Ausführliches Nachdenken, langsamer" },
+] as const;
+
+export type ReasoningEffort = (typeof REASONING_EFFORTS)[number]["id"];
+
+export const DEFAULT_REASONING_EFFORT: ReasoningEffort = "low";
+
+/**
+ * Reasoning-Tokens zählen gegen max_output_tokens – höhere Thinking-Stufen
+ * brauchen mehr Budget, damit die eigentliche Antwort nicht abbricht.
+ */
+const MAX_OUTPUT_TOKENS_BY_EFFORT: Record<ReasoningEffort, number> = {
+  minimal: 900,
+  low: 900,
+  medium: 2_500,
+  high: 5_000,
+};
+
+export function isKnownAiModel(value: string): value is AiModelId {
+  return AI_MODELS.some((model) => model.id === value);
+}
+
+export function isKnownReasoningEffort(value: string): value is ReasoningEffort {
+  return REASONING_EFFORTS.some((effort) => effort.id === value);
+}
+
 export const SYSTEM_INSTRUCTIONS = `Du gestaltest für die persönliche Anwendung „Eigenraum“ ein abstraktes
 Morgenartefakt auf Basis eines kurzen abendlichen Selbst-Checkouts.
 
@@ -111,16 +150,20 @@ export function buildGenerationInput(
  * Der Authorization-Header entsteht ausschließlich im nativen Plugin –
  * hier gibt es keinen Key und keine URL.
  */
-export function buildResponsesRequestBody(input: GenerationInput, model: string): string {
+export function buildResponsesRequestBody(
+  input: GenerationInput,
+  model: string,
+  reasoningEffort: ReasoningEffort = DEFAULT_REASONING_EFFORT,
+): string {
   return JSON.stringify({
     model,
     store: false,
     instructions: SYSTEM_INSTRUCTIONS,
     input: JSON.stringify(input),
     reasoning: {
-      effort: "low",
+      effort: reasoningEffort,
     },
-    max_output_tokens: 900,
+    max_output_tokens: MAX_OUTPUT_TOKENS_BY_EFFORT[reasoningEffort],
     text: {
       format: {
         type: "json_schema",

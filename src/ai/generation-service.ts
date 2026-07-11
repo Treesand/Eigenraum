@@ -100,6 +100,7 @@ export async function generateMorningArtifact(
       checkout,
       recentContext,
       model: settings.aiModel,
+      reasoningEffort: settings.reasoningEffort,
     });
 
     const now = new Date().toISOString();

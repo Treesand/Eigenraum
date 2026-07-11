@@ -52,7 +52,11 @@ Entwicklungsmodus einen lokalen Mock.
 
 - Responses API (`POST /v1/responses`) mit `store: false`, ohne Streaming,
   ohne `previous_response_id` – jede Generierung ist stateless.
-- Standardmodell: `gpt-5.6-terra` (zentral in `src/ai/prompt-builder.ts`).
+- Modell in den Einstellungen wählbar: Terra (`gpt-5.6-terra`, Standard),
+  Sol (`gpt-5.6-sol`) oder Luna (`gpt-5.6-luna`); ebenso die Thinking-Stufe
+  (`reasoning.effort`: minimal/low/medium/high, Standard low – höhere Stufen
+  erhalten automatisch mehr `max_output_tokens`). Beides zentral in
+  `src/ai/prompt-builder.ts`.
 - Structured Outputs: Das JSON-Schema wird aus einer einzigen Zod-Definition
   erzeugt (`src/ai/output-schema.ts`), strict mode, `additionalProperties: false`.
 - Jede Antwort wird lokal erneut mit Zod validiert, Zahlenwerte werden in

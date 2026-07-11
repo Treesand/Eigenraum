@@ -45,7 +45,7 @@ export class NativeAiProvider implements AiProvider {
     }
 
     const input = buildGenerationInput(request.checkout, request.recentContext);
-    const body = buildResponsesRequestBody(input, request.model);
+    const body = buildResponsesRequestBody(input, request.model, request.reasoningEffort);
 
     let status: number;
     let responseBody: string;

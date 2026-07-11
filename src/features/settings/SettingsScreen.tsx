@@ -3,8 +3,15 @@ import { Page } from "../../components/Page";
 import { Button } from "../../components/Button";
 import { ErrorNotice } from "../../components/ErrorNotice";
 import { useAppState } from "../../app/app-state";
+import { Select } from "../../components/Select";
 import { exportAllData, deleteAllData } from "../../storage/export";
 import { friendlyMessageFor, toAiError } from "../../ai/errors";
+import {
+  AI_MODELS,
+  REASONING_EFFORTS,
+  isKnownAiModel,
+  type ReasoningEffort,
+} from "../../ai/prompt-builder";
 import { APP_VERSION } from "../../app/version";
 
 export function SettingsScreen() {
@@ -88,6 +95,24 @@ export function SettingsScreen() {
             </Button>
           )}
         </div>
+      </section>
+
+      <section className="surface stack">
+        <h2 className="page-subtitle">Morgenbild-Erzeugung</h2>
+        <Select
+          label="Modell"
+          value={isKnownAiModel(settings.aiModel) ? settings.aiModel : AI_MODELS[0].id}
+          options={AI_MODELS}
+          onChange={(aiModel) => updateSettings({ aiModel })}
+          testId="model-select"
+        />
+        <Select<ReasoningEffort>
+          label="Nachdenken"
+          value={settings.reasoningEffort}
+          options={REASONING_EFFORTS}
+          onChange={(reasoningEffort) => updateSettings({ reasoningEffort })}
+          testId="reasoning-select"
+        />
       </section>
 
       <section className="surface stack">
