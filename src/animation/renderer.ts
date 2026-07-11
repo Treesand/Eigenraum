@@ -42,7 +42,11 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
   return t * t * (3 - 2 * t);
 }
 
-function buildElements(layer: AnimationLayer, spec: AnimationSpec, random: SeededRandom): SceneElement[] {
+function buildElements(
+  layer: AnimationLayer,
+  spec: AnimationSpec,
+  random: SeededRandom,
+): SceneElement[] {
   const elements: SceneElement[] = [];
   const spread = 0.5 * (1 - spec.centerBias * 0.7);
 
@@ -370,7 +374,14 @@ function drawLayer(
         const wave = size * 0.5;
         ctx.beginPath();
         ctx.moveTo(-ribbonLength / 2, 0);
-        ctx.bezierCurveTo(-ribbonLength / 6, -wave, ribbonLength / 6, wave, ribbonLength / 2, 0);
+        ctx.bezierCurveTo(
+          -ribbonLength / 6,
+          -wave,
+          ribbonLength / 6,
+          wave,
+          ribbonLength / 2,
+          0,
+        );
         ctx.strokeStyle = color;
         ctx.globalAlpha = alpha;
         ctx.lineWidth = Math.max(3, size * 0.22);

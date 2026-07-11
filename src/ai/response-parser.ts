@@ -1,8 +1,5 @@
 import { AiError, aiErrorFromHttpStatus } from "./errors";
-import {
-  GeneratedArtifactOutputSchema,
-  type GeneratedArtifactOutput,
-} from "./output-schema";
+import { GeneratedArtifactOutputSchema, type GeneratedArtifactOutput } from "./output-schema";
 import { hasKnownEnums, normalizeAnimationSpec } from "../animation/normalize-spec";
 import { clampPhrase } from "../domain/morning-artifact";
 

@@ -126,8 +126,8 @@ export function SettingsScreen() {
       <section className="surface stack">
         <h2 className="page-subtitle">Daten</h2>
         <p className="muted small">
-          Deine Einträge werden lokal gespeichert. Für die Erzeugung eines Morgenbildes wird
-          der dafür benötigte Checkout direkt von deinem Gerät an OpenAI gesendet.
+          Deine Einträge werden lokal gespeichert. Für die Erzeugung eines Morgenbildes wird der
+          dafür benötigte Checkout direkt von deinem Gerät an OpenAI gesendet.
         </p>
         <div className="row">
           <Button onClick={exportJson}>Als JSON exportieren</Button>

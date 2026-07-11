@@ -4,7 +4,11 @@ import { addLocalDays } from "../domain/date-key";
 import type { MorningArtifact } from "../domain/morning-artifact";
 import { createId } from "../domain/id";
 import { createFallbackArtifact } from "../animation/fallback-spec";
-import { getArtifactByDate, listArtifactsBefore, upsertArtifactForDate } from "../storage/artifact-repository";
+import {
+  getArtifactByDate,
+  listArtifactsBefore,
+  upsertArtifactForDate,
+} from "../storage/artifact-repository";
 import { getEveningCheckoutByDate } from "../storage/evening-repository";
 import type { AiProvider } from "./AiProvider";
 import type { RecentContextEntry } from "./prompt-builder";
@@ -47,10 +51,7 @@ async function buildRecentContext(
   return entries.slice(0, contextDepth);
 }
 
-function pendingArtifact(
-  checkout: EveningCheckout,
-  targetDate: LocalDateKey,
-): MorningArtifact {
+function pendingArtifact(checkout: EveningCheckout, targetDate: LocalDateKey): MorningArtifact {
   const now = new Date().toISOString();
   return {
     id: createId(),

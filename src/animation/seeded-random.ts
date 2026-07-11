@@ -29,5 +29,5 @@ export function hashStringToSeed(input: string): number {
     hash ^= input.charCodeAt(i);
     hash = Math.imul(hash, 0x01000193);
   }
-  return hash >>> 0 & 0x7fffffff;
+  return (hash >>> 0) & 0x7fffffff;
 }

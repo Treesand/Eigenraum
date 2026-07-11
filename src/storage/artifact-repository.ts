@@ -6,7 +6,9 @@ import { getDatabase } from "./database";
  * Pro Zieldatum gibt es höchstens ein Artefakt – ein neues für
  * denselben Tag ersetzt das bestehende (gleiche id wird beibehalten).
  */
-export async function upsertArtifactForDate(artifact: MorningArtifact): Promise<MorningArtifact> {
+export async function upsertArtifactForDate(
+  artifact: MorningArtifact,
+): Promise<MorningArtifact> {
   const db = getDatabase();
   return db.transaction("rw", db.morningArtifacts, async () => {
     const existing = await db.morningArtifacts

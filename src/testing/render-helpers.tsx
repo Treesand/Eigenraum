@@ -29,8 +29,6 @@ export function renderWithAppState(ui: ReactNode, options: TestAppStateOptions =
   const state = makeAppState(options);
   return {
     state,
-    ...render(
-      <AppStateContext.Provider value={state}>{ui}</AppStateContext.Provider>,
-    ),
+    ...render(<AppStateContext.Provider value={state}>{ui}</AppStateContext.Provider>),
   };
 }

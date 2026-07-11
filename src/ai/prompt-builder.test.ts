@@ -62,7 +62,10 @@ describe("buildResponsesRequestBody", () => {
   });
 
   it("bleibt deutlich unter dem 64-KiB-Limit des Plugins", () => {
-    const raw = buildResponsesRequestBody(buildGenerationInput(makeCheckout(), []), DEFAULT_AI_MODEL);
+    const raw = buildResponsesRequestBody(
+      buildGenerationInput(makeCheckout(), []),
+      DEFAULT_AI_MODEL,
+    );
     expect(new TextEncoder().encode(raw).length).toBeLessThan(64 * 1024);
   });
 });

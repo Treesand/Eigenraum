@@ -153,7 +153,11 @@ export function EveningCheckoutScreen() {
 
       <div className="stack">
         <p className="field-label">Wie deutlich war dieser Zustand?</p>
-        <div className="choice-chips" role="group" aria-label="Wie deutlich war dieser Zustand?">
+        <div
+          className="choice-chips"
+          role="group"
+          aria-label="Wie deutlich war dieser Zustand?"
+        >
           {INTENSITIES.map((value) => (
             <button
               key={value}

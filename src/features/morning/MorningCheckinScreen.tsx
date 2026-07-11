@@ -13,10 +13,7 @@ import {
   type MorningNeed,
   type MorningThreat,
 } from "../../domain/morning-checkin";
-import {
-  getMorningCheckinByDate,
-  saveMorningCheckin,
-} from "../../storage/morning-repository";
+import { getMorningCheckinByDate, saveMorningCheckin } from "../../storage/morning-repository";
 
 export function MorningCheckinScreen() {
   const { navigate } = useAppState();

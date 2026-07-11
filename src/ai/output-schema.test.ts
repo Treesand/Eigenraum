@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildOpenAiOutputJsonSchema,
-  GeneratedArtifactOutputSchema,
-} from "./output-schema";
+import { buildOpenAiOutputJsonSchema, GeneratedArtifactOutputSchema } from "./output-schema";
 import { makeGeneratedOutput } from "../testing/fixtures";
 
 interface Node {

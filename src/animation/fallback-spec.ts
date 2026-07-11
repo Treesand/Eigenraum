@@ -193,10 +193,7 @@ const qualityDesign: Record<
   },
 };
 
-export function buildFallbackAnimationSpec(
-  state: EveningState,
-  seed: number,
-): AnimationSpec {
+export function buildFallbackAnimationSpec(state: EveningState, seed: number): AnimationSpec {
   const entry = fallbackMap[state];
   const design = qualityDesign[entry.targetQuality];
   const random = mulberry32(seed);

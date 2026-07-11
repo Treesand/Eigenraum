@@ -14,7 +14,9 @@ describe("clampPhrase", () => {
   });
 
   it("kürzt lange Phrasen auf höchstens 90 Zeichen", () => {
-    const long = "Ein sehr langer Satz, der weit über die erlaubte Länge hinausgeht, ".repeat(4);
+    const long = "Ein sehr langer Satz, der weit über die erlaubte Länge hinausgeht, ".repeat(
+      4,
+    );
     const clamped = clampPhrase(long);
     expect(clamped.length).toBeLessThanOrEqual(PHRASE_MAX_LENGTH);
     expect(clamped.endsWith("…")).toBe(true);
